@@ -15,7 +15,7 @@ interface ProtectedProps {
 
 function Protected({user, children}: ProtectedProps) {
   return (
-    user ?.role === 'user' ? children : <Navigate to="/login" />
+    user ? children : <Navigate to="/login" />
   ) 
 }
 

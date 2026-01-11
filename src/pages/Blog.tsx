@@ -40,7 +40,6 @@ function Blog() {
             }}
             className='mt-4'
             />
-    <Link to={'/logout'}>Logout</Link>
     </div>
   )
 }

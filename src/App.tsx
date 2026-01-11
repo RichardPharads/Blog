@@ -1,30 +1,11 @@
-import React from 'react'
-import {BrowserRouter, Route , Router , Routes} from 'react-router-dom'
-import Home from './pages/Home'
-import Contact from './pages/Contact'
-import Blog from './pages/Blog'
-import Notfound from './pages/Notfound'
-import Register from './pages/Auth/Register'
-import Login from './pages/Auth/Login'
-import { Provider } from 'react-redux'
-import {store} from './store/store'
-import Navigation from './components/Navigation'
+import { Provider, useDispatch } from 'react-redux'
 
-function App() {
+import {store} from './store/store'
+import AppContent from './components/AppContents'
+export default function App() {
   return (
-  <Provider store={store}>
-   <BrowserRouter>
-    <Navigation/>
-    <Routes>
-      <Route path='*' element={<Notfound/>}/>
-      <Route path='/' element={<Home/>}/>
-      <Route path='/register' element={<Register/>}/>
-      <Route path='/login' element={<Login/>} />
-      <Route path='/contact' element={<Contact/>}/>
-      <Route path='/blog'  element={<Blog/>}/>
-  </Routes>
-</BrowserRouter>
-</Provider>
-);
+    <Provider store={store}>
+      <AppContent/>
+    </Provider>
+  )
 }
-export default App;

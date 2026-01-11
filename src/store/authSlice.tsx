@@ -1,15 +1,22 @@
 import { createSlice , } from "@reduxjs/toolkit";
 import type {PayloadAction }from "@reduxjs/toolkit"
-import type {User} from '@supabase/supabase-js'
+import type {User , Session} from '@supabase/supabase-js'
 
 interface AuthState {
     user: User | null;
-    authorized: boolean,
+    session: Session | null;
+    authorized: boolean;
+    loading: boolean;
+    error: string | null;
+    
 }
 
 const initialState: AuthState = {
     user: null,
-    authorized: false
+    session: null,
+    authorized: false,
+    loading:false,
+    error:null
 }
 
 
