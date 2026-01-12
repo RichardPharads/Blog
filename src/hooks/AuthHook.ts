@@ -1,15 +1,19 @@
 // hooks/useAuth.ts
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import  { setUser, clearUser } from '../store/authSlice';
+import { setUser, clearUser } from '../store/authSlice';
 import { supabase } from '../api/supabaseClient';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import type { RootState } from '../store/store'; // Import your RootState type
 
 export const useAuth = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state.auth.user);
-  const authorized = useSelector((state: any) => state.auth.authorized);
+  
+  // Use proper typing with RootState
+  const user = useSelector((state: RootState) => state.auth.user);
+  const authorized = useSelector((state: RootState) => state.auth.authorized);
+  const loading = useSelector((state: RootState) => state.auth.loading);
 
   useEffect(() => {
     checkUser();
@@ -28,13 +32,14 @@ export const useAuth = () => {
     return () => subscription.unsubscribe();
   }, [dispatch]);
 
-  
   const checkUser = async () => {
-    const {data: {session}} = await supabase.auth.getSession()
-    if(session?.user){
-        dispatch(setUser(session.user))
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) {
+      dispatch(setUser(session.user));
+    } else {
+      dispatch(clearUser());
     }
-  }
+  };
 
   // Simple login function
   const login = async (email: string, password: string) => {
@@ -45,6 +50,7 @@ export const useAuth = () => {
     
     if (data.user) {
       dispatch(setUser(data.user));
+      navigate('/'); // Redirect after login
     }
     
     return { data, error };
@@ -62,8 +68,8 @@ export const useAuth = () => {
     
     if (data.user) {
       dispatch(setUser(data.user));
+      navigate('/');
     }
-    
     
     return { data, error };
   };
@@ -72,11 +78,13 @@ export const useAuth = () => {
   const logout = async () => {
     await supabase.auth.signOut();
     dispatch(clearUser());
+    navigate('/login'); // Redirect to login after logout
   };
 
   return {
     user,
     authorized,
+    loading,
     login,
     signup,
     logout

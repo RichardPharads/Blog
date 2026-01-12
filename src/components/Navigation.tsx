@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { clearUser } from '../store/authSlice'
 import { useAuth } from '../hooks/AuthHook'
 
 const Authorized = ({ user, onLogout }: { user: any, onLogout: () => void }) => {
     return (
         <>
             <li>
-                <Link to="/create-post">Create Post</Link>
+                <Link to="/create-post" className='border px-4 py-1.5 rounded-md bg-neutral-700 text-white'>Create Post</Link>
             </li>
             <li>
                 <button onClick={onLogout}>Log out</button>
             </li>
             <li>
-                <Link to="/profile">
+                <Link to="/profile" className='border px-4 py-1.5 rounded-md'>
                     {user?.user_metadata?.name || user?.email || 'Profile'}
                 </Link>
             </li>
@@ -49,9 +48,6 @@ function Navigation() {
         
         return (
             <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">
-                    {user.user_metadata?.name || user.email}
-                </span>
                 {user.user_metadata?.avatar_url && (
                     <img 
                         src={user.user_metadata.avatar_url} 
@@ -59,6 +55,10 @@ function Navigation() {
                         className="w-8 h-8 rounded-full"
                     />
                 )}
+                <span className="text-sm text-gray-600">
+                    {user.user_metadata?.name || user.email}
+                </span>
+                
             </div>
         )
     }
@@ -67,11 +67,9 @@ function Navigation() {
         <div className='py-4 px-10 border-b flex justify-between items-center'>
             <div className="flex items-center gap-4">
                 <Link to="/" className="text-xl font-bold">
-                    MyBlog
-                </Link>
-                <Link to="/blog" className="hover:text-blue-600">
                     Blog
                 </Link>
+
                 {renderUserInfo()}
             </div>
             
@@ -84,7 +82,7 @@ function Navigation() {
                             <li>
                                 <Link 
                                     to="/register" 
-                                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                    className="border px-4 py-1.5 rounded-md bg-neutral-700 text-white"
                                 >
                                     Sign Up
                                 </Link>
@@ -92,7 +90,7 @@ function Navigation() {
                             <li>
                                 <Link 
                                     to="/login" 
-                                    className="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50"
+                                    className="border px-4 py-1.5 rounded-md "
                                 >
                                     Sign In
                                 </Link>

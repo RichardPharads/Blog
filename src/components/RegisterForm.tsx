@@ -1,34 +1,22 @@
 import { useState } from 'react'
-import { supabase } from '../api/supabaseClient'
-import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../hooks/AuthHook'
+
 
 function RegisterForm() {
-  const navigate = useNavigate()
-
+  const {signup} = useAuth()
   const [name , setName ] = useState("")
   const [email , setEmail ] = useState("")
   const [password , setPassword ] = useState("")
   const [error , setError ] = useState<string | null>(null)
-
   
   const handleSubmit = async (e:any) => {
     e.preventDefault()
-
-    const {data , error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {name}
-      }
-    })
-
+    const {data , error} = await signup(email ,password , {name})
     if(error){
       setError(error.message)
     }else{
-      console.log(data.user)
-      navigate('/')
+      console.log("Sucessfully created" , data?.user?.email)
     }
-    
   }
 
   return (
@@ -52,7 +40,6 @@ function RegisterForm() {
                 }
             </div>
         </form>
-        
     </div>
   )
 }

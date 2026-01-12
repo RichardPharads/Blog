@@ -1,22 +1,20 @@
-import React from 'react'
-import { Navigate } from 'react-router-dom'
+// pages/Protected.tsx
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../hooks/AuthHook';
 
-interface User {
-    id: string,
-    name: string,
-    email: string,
-    role: string,
-    avatar?: string,
-}
-interface ProtectedProps { 
-    user: User | null
-    children: React.ReactNode
-}
+const Protected = () => {
+  const { authorized, loading } = useAuth();
+  
+  // Show loading indicator while checking auth
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  
+  if (!authorized) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return <Outlet />;
+};
 
-function Protected({user, children}: ProtectedProps) {
-  return (
-    user ? children : <Navigate to="/login" />
-  ) 
-}
-
-export default Protected
+export default Protected;

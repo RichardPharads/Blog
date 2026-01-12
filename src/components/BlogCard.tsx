@@ -9,6 +9,7 @@ interface Author {
 }
 
 interface BlogPost {
+  id:string,
   slug: string
   title: string
   excerpt: string
@@ -16,7 +17,7 @@ interface BlogPost {
   category: string
   publishedAt?: string
   readTimeMinutes: number
-  author: Author
+  author: string
 }
 
 interface BlogPostCardProps {
@@ -28,6 +29,7 @@ interface BlogPostCardProps {
 
 function BlogCard({ className = '', post }: BlogPostCardProps) {
   const {
+    id,
     slug,
     title,
     excerpt,
@@ -48,7 +50,7 @@ function BlogCard({ className = '', post }: BlogPostCardProps) {
       className={`group block overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-xl transition ${className}`}
     >
       {/* Image */}
-      <div className="relative h-48 w-full overflow-hidden">
+      <div key={id} className="relative h-48 w-full overflow-hidden">
         <img
           src={coverImage || '/placeholder.jpg'}
           alt={title}
@@ -72,18 +74,7 @@ function BlogCard({ className = '', post }: BlogPostCardProps) {
         {/* Footer */}
         <div className="mt-4 flex items-center justify-between text-xs text-gray-500">
           <div className="flex items-center gap-2">
-            {author.avatar ? (
-              <img
-                src={author.avatar}
-                alt={author.name}
-                className="h-7 w-7 rounded-full object-cover"
-              />
-            ) : (
-              <div className="h-7 w-7 rounded-full bg-gray-300 flex items-center justify-center text-xs font-bold text-gray-700">
-                {author.name.charAt(0)}
-              </div>
-            )}
-            <span>{author.name}</span>
+            {author}
           </div>
 
           <div className="flex items-center gap-2">
