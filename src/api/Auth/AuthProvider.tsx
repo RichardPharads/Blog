@@ -1,38 +1,35 @@
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { supabase } from '../supabaseClient'
-import { setUser, clearUser } from '../../store/authSlice'
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { supabase } from "../supabaseClient";
+import { setUser, clearUser } from "../../store/authSlice";
+import type { User, AuthChangeEvent, Session } from "@supabase/supabase-js";
 
-export default function AuthListener() {
-  const dispatch = useDispatch()
+export default function AuthProvider() {
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    // 1. Get current user right away (important on page refresh)
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) {
-        dispatch(setUser(user))
-      } else {
-        dispatch(clearUser())
+    supabase.auth.getUser().then(({ data }) => {
+      const user: User | null = data.user;
+
+      if (user) dispatch(setUser(user));
+      else dispatch(clearUser());
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(
+      (event: AuthChangeEvent, session: Session | null) => {
+        console.log("Auth event:", event, session?.user?.email);
+
+        if (session?.user) dispatch(setUser(session.user));
+        else dispatch(clearUser());
       }
-    })
+    );
 
-    // 2. Subscribe to auth changes (login, logout, token refresh, etc)
-    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth event:', event, session?.user?.email)
-
-      if (session?.user) {
-        dispatch(setUser(session.user))
-      } else {
-        dispatch(clearUser())
-      }
-    })
-
-    // Cleanup
     return () => {
-      listener.subscription.unsubscribe()
-    }
-  }, [dispatch])
+      subscription.unsubscribe();
+    };
+  }, [dispatch]);
 
-  return null
-
+  return null;
 }
