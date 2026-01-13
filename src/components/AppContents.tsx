@@ -7,7 +7,7 @@ import Login from '../pages/Login'
 import Notfound from '../pages/Notfound'
 import CreatePost from '../pages/CreatePost'
 import Profile from '../pages/Profile'
-import PostItem  from '../pages/PostItem'
+import BlogItem  from '../pages/BlogItem'
 
 function AppContent() {
   
@@ -18,7 +18,7 @@ function AppContent() {
         <Route path='/' element={<Blog/>}/>
         
         <Route path='/blog' element={<Blog/>}/>
-        <Route path='/blog/:slug' element={<PostItem/>}/> {/* Dynamic route */}
+        <Route path='/blog/:slug' element={<BlogItem/>}/> {/* Dynamic route */}
 
         <Route path='/register' element={<Register/>}/>
         <Route path='/login' element={<Login/>}/>

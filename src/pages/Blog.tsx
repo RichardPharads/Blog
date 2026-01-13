@@ -2,6 +2,7 @@ import BlogCard from '../components/BlogCard'
 import { postService } from '../services/post.services'
 import { useEffect, useState } from 'react'
 import type { Post } from '../services/post.services'
+import ParentLayout from '../components/Layout/ParentLayout'
 
 function Blog() {
   const [loading , setLoading ] = useState(true)
@@ -46,8 +47,10 @@ function Blog() {
 
 
   return (
-    <div className=' bg-gray-100 flex gap-2 p-10'>
-        {
+    <div className='w-full min-h-lvh'>
+       
+          <ParentLayout>
+          {
           posts?.map((post) => (
             <BlogCard 
             post={{
@@ -64,7 +67,7 @@ function Blog() {
             />
           ))
         }
-          
+          </ParentLayout>
     </div>
   )
 }

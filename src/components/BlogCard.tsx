@@ -38,10 +38,10 @@ function BlogCard({ className = '', post }: BlogPostCardProps) {
   return (
     <Link
       to={`/blog/${slug}`}
-      className={`group block overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-xl transition ${className}`}
+      className={`group block w-full overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-xl transition ${className}`}
     >
       {/* Image */}
-      <div key={id} className="relative h-48 w-full overflow-hidden">
+      <div key={id} className="relative h-48 w-full overflow-hidden pb-10 px-4">
         <img
           src={coverImage || '/placeholder.jpg'}
           alt={title}
@@ -58,7 +58,7 @@ function BlogCard({ className = '', post }: BlogPostCardProps) {
           {title}
         </h3>
 
-        <p className="mt-2 text-sm text-gray-600 line-clamp-3">
+        <p  className="mt-2 text-sm text-gray-600 line-clamp-2">
           {excerpt}
         </p>
 
@@ -75,6 +75,7 @@ function BlogCard({ className = '', post }: BlogPostCardProps) {
           </div>
         </div>
       </div>
+      
     </Link>
   )
 }
