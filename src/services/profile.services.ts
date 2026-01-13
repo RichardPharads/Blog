@@ -3,7 +3,7 @@ import {supabase} from '../api/supabaseClient'
 export type Profile = { 
     id: string,
     username: string,
-    avatar_url:string | null,
+    avatar_url:string,
     bio: string,
     created_at: string,
     updated_at: string
@@ -14,11 +14,10 @@ export type ProfileUpdate = Partial<ProfileCreate>
 
 export const profileServices = {
     // CREATE PROFILE
-    createProfile : async (id:any , data: ProfileCreate) => {
+    createProfile : async (data: ProfileCreate) => {
         const {data: profile , error } = await supabase
         .from ("profiles")
         .insert(data)
-        .eq('id', id)
         .select()
         .single()
         if(error){

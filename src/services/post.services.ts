@@ -2,22 +2,21 @@
 import { supabase } from '../api/supabaseClient'
 
 export type Post = {
-  id: string
+  id:string,
   title: string
   content: string
   slug: string
-  excerpt: string,
-  category: string,
-  readtime:number,
-  author:string,
-  views: string,
+  excerpt: string
+  category: string
+  readtime: string
+  author: string
+  created_at: string | any
   published: boolean
-  created_at: string
   user_id: string
 }
 
 
-export type PostCreate =  Omit<Post , 'id' | 'created_at'>
+export type PostCreate =  Omit<Post , 'id'>
 export type PostUpdate = Partial<PostCreate>
 
 
@@ -33,11 +32,6 @@ export const postService = {
     if (error) throw error
     return post
   },
-
-  createDraft: async (data: Omit<PostCreate, 'published'>) => {
-    return postService.createPost({ ...data, published: false })
-  },
-
   // READ
   getPost: async (id: string) => {
     const { data: post, error } = await supabase
@@ -55,7 +49,7 @@ export const postService = {
       .from('posts')
       .select('*')
       .eq('published', true)
-    
+
     if (options?.limit) {
       query = query.limit(options.limit)
     }
@@ -93,18 +87,6 @@ export const postService = {
     return posts
   },
 
-  getDrafts: async (userId: string) => {
-    const { data: posts, error } = await supabase
-      .from('posts')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('published', false)
-      .order('created_at', { ascending: false })
-    
-    if (error) throw error
-    return posts
-  },
-
   // UPDATE
   updatePost: async (id: string, data: PostUpdate) => {
     const { data: post, error } = await supabase
@@ -125,32 +107,6 @@ export const postService = {
   unpublishPost: async (id: string) => {
     return postService.updatePost(id, { published: false })
   },
-
-  likePost: async (postId: string, userId: string) => {
-    const { error } = await supabase
-      .from('post_likes')
-      .insert({ post_id: postId, user_id: userId })
-    
-    if (error) throw error
-  },
-
-  unlikePost: async (postId: string, userId: string) => {
-    const { error } = await supabase
-      .from('post_likes')
-      .delete()
-      .eq('post_id', postId)
-      .eq('user_id', userId)
-    
-    if (error) throw error
-  },
-
-  incrementViewCount: async (id: string) => {
-    const { data: post } = await postService.getPost(id)
-    const currentViews = post.views || 0
-    
-    return postService.updatePost(id, { views: currentViews + 1 })
-  },
-
   // DELETE
   deletePost: async (id: string) => {
     const { error } = await supabase
@@ -160,7 +116,5 @@ export const postService = {
     
     if (error) throw error
   },
-  deleteDraft: async (id: string) => {
-    return postService.deletePost(id)
-  },
+
 }

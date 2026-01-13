@@ -2,12 +2,6 @@ import React from 'react'
 import { format } from 'date-fns'
 import { Link } from 'react-router-dom'
 
-
-interface Author {
-  name: string
-  avatar?: string
-}
-
 interface BlogPost {
   id:string,
   slug: string
@@ -15,8 +9,8 @@ interface BlogPost {
   excerpt: string
   coverImage?: string
   category: string
-  publishedAt?: string
-  readTimeMinutes: number
+  publishedAt: string
+  readTimeMinutes: string
   author: string
 }
 
@@ -24,8 +18,6 @@ interface BlogPostCardProps {
   post: BlogPost
   className?: string
 }
-
-
 
 function BlogCard({ className = '', post }: BlogPostCardProps) {
   const {

@@ -7,7 +7,7 @@ const Authorized = ({ user, onLogout }: { user: any, onLogout: () => void }) => 
     return (
         <>
             <li>
-                <Link to="/create-post" className='border px-4 py-1.5 rounded-md bg-neutral-700 text-white'>Create Post</Link>
+                <Link to="/create" className='border px-4 py-1.5 rounded-md bg-neutral-700 text-white'>Create Post</Link>
             </li>
             <li>
                 <button onClick={onLogout}>Log out</button>

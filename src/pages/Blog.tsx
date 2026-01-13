@@ -59,7 +59,7 @@ function Blog() {
                 category: post.category,
                 publishedAt: post.created_at,
                 readTimeMinutes: post.readtime,
-                author: post.author,
+                author: post.author || 'user',
             }}
             className='mt-4'
             />
