@@ -20,8 +20,8 @@ function RegisterForm() {
   }
 
   return (
-    <div>
-        <form onSubmit={handleSubmit} className='w-[400px] shadow-md p-4 py-6 grid gap-2 rounded-md'>
+    <div className='w-full place-items-center'>
+        <form onSubmit={handleSubmit} className='w-full md:w-[400px] shadow-md p-4 py-6 grid gap-2 rounded-md'>
           
             <div className=''>
               <h2 className='font-medium'>User information</h2>

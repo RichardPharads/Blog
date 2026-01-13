@@ -10,6 +10,7 @@ export type Post = {
   category: string
   readtime: string
   author: string
+  image_url?: string,
   created_at: string | any
   published: boolean
   user_id: string

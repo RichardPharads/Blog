@@ -29,8 +29,8 @@ function LoginForm() {
     }
   }
   return (
-    <div>
-        <form onSubmit={handleSubmit} className='w-[400px] shadow-md p-4 py-6 grid gap-2 rounded-md'>
+    <div className='place-items-center w-full'>
+        <form onSubmit={handleSubmit} className='w-full md:w-[400px] shadow-md p-4 py-6 grid gap-2 rounded-md'>
           
             <div className=''>
               <h2 className='font-medium'>Sign In</h2>

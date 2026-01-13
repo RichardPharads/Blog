@@ -112,6 +112,7 @@ function CreatePost() {
                     category: "",
                     readtime: "",
                     author: user.email?.split('@')[0] || "",
+                    image_url: "",
                     published: false,
                     user_id: user.id || "",
                     created_at: user.created_at
@@ -188,7 +189,23 @@ function CreatePost() {
                         placeholder="post-slug"
                     />
                 </div>
-
+                {/* Image URL*/}
+                <div>
+                    <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-2">
+                        image_url *
+                    </label>
+                    <input
+                        type="text"
+                        id="image_url"
+                        name="image_url"
+                        value={postData.image_url}
+                        onChange={handleChange}
+                        required
+                        disabled={isLoading}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        placeholder="Post image_url"
+                    />
+                </div>
                 {/* Content */}
                 <div>
                     <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">

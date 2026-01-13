@@ -54,13 +54,12 @@ function Blog() {
           posts?.map((post) => (
             <BlogCard 
             post={{
-                id:post.id,
                 slug: post.slug,
                 title: post.title,
                 excerpt: post.excerpt,
                 category: post.category,
-                publishedAt: post.created_at,
-                readTimeMinutes: post.readtime,
+                published: post.created_at,
+                readtime: post.readtime,
                 author: post.author || 'user',
             }}
             className='mt-4'

@@ -1,49 +1,39 @@
 import { format } from 'date-fns'
 import { Link } from 'react-router-dom'
+import type {PostUpdate} from '../services/post.services'
 
-interface BlogPost {
-  id:string,
-  slug: string
-  title: string
-  excerpt: string
-  coverImage?: string
-  category: string
-  publishedAt: string
-  readTimeMinutes: string
-  author: string
-}
 
 interface BlogPostCardProps {
-  post: BlogPost
+  post: PostUpdate
   className?: string
 }
 
 function BlogCard({ className = '', post }: BlogPostCardProps) {
   const {
-    id,
-    slug,
     title,
+    slug,
     excerpt,
-    coverImage,
+    created_at,
+    image_url,
     category,
-    publishedAt,
-    readTimeMinutes,
     author,
+    readtime
   } = post
 
-  const formatDate = publishedAt
-    ? format(new Date(publishedAt), 'MMM d, yyyy')
+  const formatDate = created_at
+    ? format(new Date(created_at), 'MMM d, yyyy')
     : 'Recent'
 
   return (
     <Link
+      
       to={`/blog/${slug}`}
-      className={`group block w-full overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-xl transition ${className}`}
+      className={`group block w-full overflow-hidden rounded-2xl bg-white border border-neutral-400/50 hover:shadow-xl transition ${className}`}
     >
       {/* Image */}
-      <div key={id} className="relative h-48 w-full overflow-hidden pb-10 px-4">
+      <div key={title} className="relative h-48 w-full overflow-hidden pb-10 px-4">
         <img
-          src={coverImage || '/placeholder.jpg'}
+          src={image_url || '/placeholder.jpg'}
           alt={title}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
@@ -53,7 +43,8 @@ function BlogCard({ className = '', post }: BlogPostCardProps) {
       </div>
 
       {/* Content */}
-      <div className="p-5">
+      <div className="p-5 flex flex-col justify-batween border h-full">
+        <div className='flex flex-col'>
         <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition">
           {title}
         </h3>
@@ -61,6 +52,7 @@ function BlogCard({ className = '', post }: BlogPostCardProps) {
         <p  className="mt-2 text-sm text-gray-600 line-clamp-2">
           {excerpt}
         </p>
+        </div>
 
         {/* Footer */}
         <div className="mt-4 flex items-center justify-between text-xs text-gray-500">
@@ -71,7 +63,7 @@ function BlogCard({ className = '', post }: BlogPostCardProps) {
           <div className="flex items-center gap-2">
             <span>{formatDate}</span>
             <span>•</span>
-            <span>{readTimeMinutes} min</span>
+            <span>{readtime} min</span>
           </div>
         </div>
       </div>

@@ -2,18 +2,19 @@ import { useEffect, useState } from 'react'
 import { postService } from '../services/post.services'
 import type { Post } from '../services/post.services' // Use Post, not PostUpdate
 import { useNavigate, useParams } from 'react-router-dom'
+import { useAppSelector } from '../hooks'
 
 function PostItem() {
   const navigate = useNavigate()
+
+
   const { slug } = useParams<{ slug: string }>()
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
   const [data, setData] = useState<Post | null>(null)
   const [editable , setEditable ] = useState<boolean>(false)
+  const user = useAppSelector(state => state.auth.user?.id)
   
-
-  
-
   useEffect(() => {
     if (slug) {
      getItemSlug()
@@ -33,8 +34,6 @@ function PostItem() {
       
       console.log("Fetching post with slug:", slug)
       const item = await postService.getPostBySlug(slug)
-      
-      console.log("Post data received:", item)
       setData(item)
       return item.id
       
@@ -52,8 +51,8 @@ function PostItem() {
     navigate('/blog')
   }
 
+
   
- 
   // Handle loading state
   if (loading) {
     return (
@@ -90,7 +89,7 @@ function PostItem() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div  className="max-w-4xl mx-auto px-4 py-8">
       <article className="bg-white rounded-lg shadow-sm p-6 md:p-8">
         {/* Category */}
         <div className="mb-4 flex  justify-between">
@@ -98,15 +97,26 @@ function PostItem() {
             {data.category || "Uncategorized"}
           </span>
           <div className='flex gap-2'>
-          <button
+          
+          {
+            data.user_id === user && (
+              <>
+              <button
            className='border text-center py-1.5 px-3 rounded-md' onClick={() => setEditable(prev => !prev)}>
               {editable ? "Save" : "Edit"}
           </button>
           <button
-            onClick={handleDeletePost}
-           className='border bg-red-500 text-center py-1.5 px-3 rounded-md'>
-              Delete
-          </button>
+              onClick={handleDeletePost}
+             className='border bg-red-500 text-center py-1.5 px-3 rounded-md'>
+                Delete
+            </button> 
+              </>
+              
+            
+            
+            )
+          }
+         
           </div>
         </div>
 
