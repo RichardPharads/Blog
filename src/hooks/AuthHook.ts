@@ -20,7 +20,7 @@ export const useAuth = () => {
     
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_, session) => {
+      (_:string, session) => {
         if (session?.user) {
           dispatch(setUser(session.user));
         } else {
@@ -57,7 +57,7 @@ export const useAuth = () => {
   };
 
   // Simple signup function
-  const signup = async (email: string, password: string, metadata?: any) => {
+  const signup = async (email: string, password: string, metadata?: Record<string ,any>) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,

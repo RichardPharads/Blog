@@ -18,17 +18,13 @@ export default function AuthProvider() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(
-      (event: AuthChangeEvent, session: Session | null) => {
-        console.log("Auth event:", event, session?.user?.email);
-
+      (_: AuthChangeEvent, session: Session | null) => {
         if (session?.user) dispatch(setUser(session.user));
         else dispatch(clearUser());
       }
     );
 
-    return () => {
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, [dispatch]);
 
   return null;
