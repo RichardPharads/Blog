@@ -31,19 +31,19 @@ function BlogCard({ className = '', post }: BlogPostCardProps) {
       className={`group block w-full overflow-hidden rounded-2xl bg-white border border-neutral-400/50 hover:shadow-xl transition ${className}`}
     >
       {/* Image */}
-      <div key={title} className="relative h-48 w-full overflow-hidden pb-10 px-4">
+      <div key={title} className="relative h-48 w-full overflow-hidden ">
         <img
           src={image_url || '/placeholder.jpg'}
           alt={title}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <span className="absolute top-3 left-3 rounded-full bg-black/70 px-3 py-1 text-xs text-white">
-          {category}
+          {category || "Uncategorized"}
         </span>
       </div>
 
       {/* Content */}
-      <div className="p-5 flex flex-col justify-batween border h-full">
+      <div className="p-5 flex flex-col justify-batween  h-full">
         <div className='flex flex-col'>
         <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition">
           {title}

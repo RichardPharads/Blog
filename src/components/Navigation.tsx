@@ -149,7 +149,6 @@ function Navigation() {
           <div className="pt-3 pb-4 px-2">
             {/* Mobile user info */}
             {renderUserInfo()}
-
             <ul className="mt-4 space-y-3">
               {authorized ? (
                 <>

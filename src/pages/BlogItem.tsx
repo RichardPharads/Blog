@@ -89,7 +89,7 @@ function PostItem() {
   }
 
   return (
-    <div  className="max-w-4xl mx-auto px-4 py-8">
+    <div  className="max-w-4xl mx-auto m-10">
       <article className="bg-white rounded-lg shadow-sm p-6 md:p-8">
         {/* Category */}
         <div className="mb-4 flex  justify-between">
@@ -150,15 +150,21 @@ function PostItem() {
             <p className="text-lg italic text-gray-700">{data.excerpt}</p>
           </div>
         )}
-
+        {
+          data.image_url && (
+            <div className='w-full aspect-video'>
+          <img src={data.image_url} alt={data.title} />
+          </div>
+          )
+        }
         {/* Content */}
         <div className="prose prose-lg max-w-none">
           <div  className="whitespace-pre-line text-gray-800 leading-relaxed">
             {data.content}
           </div>
         </div>
-
-        {/* Slug for debugging */}
+        
+        {/* Slug */}
         <div className="mt-8 pt-6 border-t border-gray-200">
           <p className="text-sm text-gray-500">
             Slug: <code className="bg-gray-100 px-2 py-1 rounded">{data.slug}</code>

@@ -61,6 +61,7 @@ function Blog() {
                 published: post.created_at,
                 readtime: post.readtime,
                 author: post.author || 'user',
+                image_url:post.image_url || 'https://api.dicebear.com/9.x/pixel-art/svg?seed=John&hair=short01,short02,short03,short04,short05'
             }}
             className='mt-4'
             />

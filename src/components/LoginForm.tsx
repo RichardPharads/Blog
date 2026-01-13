@@ -31,19 +31,15 @@ function LoginForm() {
   return (
     <div className='place-items-center w-full'>
         <form onSubmit={handleSubmit} className='w-full md:w-[400px] shadow-md p-4 py-6 grid gap-2 rounded-md'>
-          
             <div className=''>
               <h2 className='font-medium'>Sign In</h2>
               <p className='text-sm text-neutral-600'>Please fill in your details below</p>
             </div>
             <div className='grid gap-4'>
-            
                 <input type="email" onChange={(e) => setEmail(e.target.value)} value={email} className='border rounded-md px-3 py-2 placeholder:text-md w-full text-sm font-medium text-neutral-600 '  placeholder='Email '/>
-                
                 <input type="password" onChange={(e) => setPassword(e.target.value)} value={password} className='border rounded-md px-3 py-2 placeholder:text-md w-full text-sm font-medium text-neutral-600 '  placeholder='Password'/>
-                
                 <button className='py-1.5 border rounded-md text-sm bg-neutral-300 text-neutral-800 font-medium' type='submit'> Sign in</button>
-                
+
                 {
                   loading ? <h1>Loading</h1> : null
                 }

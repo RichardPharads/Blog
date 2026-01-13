@@ -89,6 +89,7 @@ function CreatePost() {
                 author: postData.author.trim() || user.email?.split('@')[0] || "Anonymous",
                 published: postData.published,
                 created_at:postData.created_at,
+                image_url: postData.image_url,
                 user_id: user.id,
             }
             

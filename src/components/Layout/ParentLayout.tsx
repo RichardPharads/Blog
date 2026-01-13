@@ -4,7 +4,7 @@ interface ParentLayoutWrapper {
 
 const ParentLayout = ({children}: ParentLayoutWrapper) => {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-col-4 xl:grid-cols-5 gap-2 p-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-col-4 xl:grid-cols-5 gap-2 p-4 sm:px-20 sm:py-10">
             {children}
         </div>
     )
