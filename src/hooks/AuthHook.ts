@@ -20,7 +20,7 @@ export const useAuth = () => {
     
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      (_, session) => {
         if (session?.user) {
           dispatch(setUser(session.user));
         } else {

@@ -1,5 +1,4 @@
 import BlogCard from '../components/BlogCard'
-import { Link } from 'react-router-dom'
 import { postService } from '../services/post.services'
 import { useEffect, useState } from 'react'
 import type { Post } from '../services/post.services'

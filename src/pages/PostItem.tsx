@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { postService } from '../services/post.services'
 import type { Post } from '../services/post.services' // Use Post, not PostUpdate
 import { useParams } from 'react-router-dom'
