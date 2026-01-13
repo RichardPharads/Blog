@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { profileServices } from '../services/profile.services' 
 import type { ProfileCreate } from '../services/profile.services'
-import { supabase } from '../api/supabaseClient'
 import { useAuth } from '../hooks/AuthHook' // Use your auth hook
 
 function Profile() {
