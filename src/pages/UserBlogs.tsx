@@ -4,7 +4,7 @@ import { postService } from "../services/post.services"
 import type { Post } from "../services/post.services"
 import ParentLayout from "../components/Layout/ParentLayout"
 import BlogCard from "../components/BlogCard"
-const Userblog = () => {
+function UserBlogs (){
 
   const user = useAppSelector(state => state.auth.user)
 
@@ -81,4 +81,4 @@ const Userblog = () => {
   )
 }
 
-export default Userblog
+export default UserBlogs
