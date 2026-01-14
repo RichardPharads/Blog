@@ -15,7 +15,7 @@ const initialState: AuthState = {
   user: null,
   session: null,
   authorized: false,
-  loading: true, // Start as true to indicate initial loading
+  loading: true,
   error: null
 };
 

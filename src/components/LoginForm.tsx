@@ -14,20 +14,33 @@ function LoginForm() {
     e.preventDefault()
     login(email , password)
     try {
-      const result = await login(email, password)
+      const {data: result , error} = await login(email, password)
       setLoading(true)
-      if(result.error){
-        setError(result.error.message)
+      if(error){
+        throw error
+      }else{
+        navigate('/')
+        return result
       }
-      return
+        
     } catch (err:any) {
       setError(err.message)
     }
     finally{
       setLoading(false)
-      navigate('/')
     }
   }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    )
+  }
+
+  
+  
   return (
     <div className='place-items-center w-full'>
         <form onSubmit={handleSubmit} className='w-full md:w-[400px] shadow-md p-4 py-6 grid gap-2 rounded-md'>
@@ -41,7 +54,14 @@ function LoginForm() {
                 <button className='py-1.5 border rounded-md text-sm bg-neutral-300 text-neutral-800 font-medium' type='submit'> Sign in</button>
 
                 {
-                  loading ? <h1>Loading</h1> : null
+                  loading ? 
+                     (
+                      <div className="flex justify-center items-center min-h-[400px]">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                      </div>
+                    ) 
+                    : null
+            
                 }
                 {
                   error ? <h1 className='text-red-500'>{error}</h1> : null

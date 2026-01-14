@@ -79,13 +79,15 @@ export const postService = {
 
   getUserPosts: async (userId: string) => {
     const { data: posts, error } = await supabase
-      .from('posts')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-    
-    if (error) throw error
-    return posts
+      .from("posts")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+  
+    return {
+      posts: posts || [],
+      error
+    }
   },
 
   // UPDATE

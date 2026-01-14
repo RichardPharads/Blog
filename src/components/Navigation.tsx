@@ -3,9 +3,17 @@ import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/AuthHook'
 
-const Authorized = ({ user, onLogout }: { user: any; onLogout: () => void }) => {
+const Authorized = ({ onLogout }: { user: any; onLogout: () => void }) => {
   return (
     <>
+    <li>
+        <Link
+          to="/profile"
+          className="border px-4 py-1.5 rounded-md hover:bg-gray-100 transition-colors"
+        >
+          My Blog Post
+        </Link>
+      </li>
       <li>
         <Link
           to="/create"
@@ -22,14 +30,7 @@ const Authorized = ({ user, onLogout }: { user: any; onLogout: () => void }) => 
           Log out
         </button>
       </li>
-      <li>
-        <Link
-          to="/profile"
-          className="border px-4 py-1.5 rounded-md hover:bg-gray-100 transition-colors"
-        >
-          {user?.user_metadata?.name || user?.email || 'Profile'}
-        </Link>
-      </li>
+      
     </>
   )
 }

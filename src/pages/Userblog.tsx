@@ -1,33 +1,36 @@
-import BlogCard from '../components/BlogCard'
-import { postService } from '../services/post.services'
-import { useEffect, useState } from 'react'
-import type { Post } from '../services/post.services'
-import ParentLayout from '../components/Layout/ParentLayout'
-import { useAppSelector } from '../hooks'
+import { useState, useEffect } from "react"
+import { useAppSelector } from "../hooks"
+import { postService } from "../services/post.services"
+import type { Post } from "../services/post.services"
+import ParentLayout from "../components/Layout/ParentLayout"
+import BlogCard from "../components/BlogCard"
+const Userblog = () => {
 
-function Blog() {
-  const [loading , setLoading ] = useState(true)
-  const [posts, setPosts] = useState<Post[] | null>([])
-  const [error , setError ] = useState<string | null>(null)
-  const paggination = useAppSelector(state => state.page.pageCount)
+  const user = useAppSelector(state => state.auth.user)
+
+  const [data, setData] = useState<Post[]>([])
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+
   useEffect(() => {
-    loadPosts()
-  },[paggination])
+    if (user?.id) {
+      handlePersonalBlog()
+    }
+  }, [user])
 
-
-
-  const loadPosts = async () => {
+  const handlePersonalBlog = async () => {
     try {
       setLoading(true)
-      setError(null)
-      const data = await  postService.getPosts({limit:paggination * 10})
-      setPosts(data)
-    } catch (error:any) {
-      console.log("failed to load post", error)
-      setError(error?.message || "Error")
-      setError(null)
-    }
-    finally{
+
+      const { posts, error } = await postService.getUserPosts(user!.id)
+
+      if (error) throw error
+
+      setData(posts)
+
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
       setLoading(false)
     }
   }
@@ -51,21 +54,13 @@ function Blog() {
     )
   }
 
-  if(posts?.length === 0){
-    return <div>
-      <h1>No Posts Yet!</h1>
-      <button onClick={loadPosts}> reload </button>
-    </div>
-  }
-
 
   return (
     <div className='w-full min-h-lvh'>
-         
-          <ParentLayout >
-          
+       
+          <ParentLayout>
           {
-          posts?.map((post) => (
+          data?.map((post) => (
             <BlogCard 
             post={{
                 slug: post.slug,
@@ -86,4 +81,4 @@ function Blog() {
   )
 }
 
-export default Blog
+export default Userblog

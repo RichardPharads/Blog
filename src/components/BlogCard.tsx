@@ -33,7 +33,7 @@ function BlogCard({ className = '', post }: BlogPostCardProps) {
       {/* Image */}
       <div key={title} className="relative h-48 w-full overflow-hidden ">
         <img
-          src={image_url || '/placeholder.jpg'}
+          src={image_url || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIoTqFvPu3IOd_DzmzYwpB_GmNYcbcd02WsQ&s'}
           alt={title}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
