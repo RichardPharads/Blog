@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import type { PostCreate } from '../services/post.services'
 import { postService } from '../services/post.services'
-import { useAuth } from '../hooks/AuthHook' // Fixed import path
-
+import { useAuth } from '../hooks/AuthHook' 
+import { useNavigate } from 'react-router-dom'
 function CreatePost() {
+    const navigate = useNavigate()
     const { user } = useAuth()
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState(false)
-    
+    const [file, setFile ] = useState<File>()
+
     const [postData, setPostData] = useState<PostCreate>({
         title: "",
         content: "",
@@ -55,9 +57,17 @@ function CreatePost() {
             }))
         }
     }, [postData.title])
+    
+    const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedFile = e.target.files?.[0]
+        if (selectedFile){
+            setFile(selectedFile)
+        }
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        
         setError(null)
         setSuccess(false)
         
@@ -78,7 +88,6 @@ function CreatePost() {
 
         try {
             setIsLoading(true)
-            
             const finalPostData: PostCreate = {
                 title: postData.title.trim(),
                 content: postData.content.trim(),
@@ -89,13 +98,12 @@ function CreatePost() {
                 author: postData.author.trim() || user.email?.split('@')[0] || "Anonymous",
                 published: postData.published,
                 created_at:postData.created_at,
-                image_url: postData.image_url,
                 user_id: user.id,
             }
             
             console.log("Submitting post data:", finalPostData)
             
-            const { data: post, error } = await postService.createPost(finalPostData)
+            const { data: post, error } = await postService.createPost(finalPostData , file)
             console.log("Successfuly Created " , post)
             if (error) {
                 throw error
@@ -104,6 +112,7 @@ function CreatePost() {
             setSuccess(true)
             
             // Reset form on success
+            navigate('/profile')
             setTimeout(() => {
                 setPostData({
                     title: "",
@@ -196,11 +205,11 @@ function CreatePost() {
                         image_url *
                     </label>
                     <input
-                        type="text"
+                        type="file"
                         id="image_url"
                         name="image_url"
-                        value={postData.image_url}
-                        onChange={handleChange}
+                        
+                        onChange={handleFile}
                         disabled={isLoading}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                         placeholder="Post image_url"

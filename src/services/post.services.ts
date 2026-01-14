@@ -22,16 +22,48 @@ export type PostUpdate = Partial<PostCreate>
 
 export const postService = {
   // CREATE POST
-  createPost: async (data: PostCreate) => {
-    const { data: post, error } = await supabase
-      .from('posts')
-      .insert(data)
+  // createPost: async (data: PostCreate) => {
+  //   const { data: post, error } = await supabase
+  //     .from('posts')
+  //     .insert(data)
+  //     .select()
+  //     .single()
+  //   if (error) throw error
+
+  //   return post
+  // },
+
+  createPost: async (data: PostCreate , file?:File) => {
+      let imageUrl = data.image_url || null
+      if (file) {
+        const filePath = `posts/${Date.now()}-${file.name}`
+    
+        // 1. Upload file
+        const { error: uploadError } = await supabase.storage
+          .from("blog_images")
+          .upload(filePath, file)
+        if (uploadError) throw uploadError
+    
+        // 2. Get public URL
+        const { data: urlData } = supabase.storage
+          .from("blog_images")
+          .getPublicUrl(filePath)
+        
+        imageUrl = urlData.publicUrl
+      }
+
+      const { data: post, error } = await supabase
+      .from("posts")
+      .insert({ ...data, image_url: imageUrl })
       .select()
       .single()
-    
+  
     if (error) throw error
     return post
-  },
+    },
+
+
+
   // READ
   getPost: async (id: string) => {
     const { data: post, error } = await supabase
@@ -91,6 +123,7 @@ export const postService = {
     return post
   },
 
+
   getUserPosts: async (userId: string) => {
     const { data: posts, error } = await supabase
       .from("posts")
@@ -105,16 +138,55 @@ export const postService = {
   },
 
   // UPDATE
-  updatePost: async (id: string, data: PostUpdate) => {
-    const { data: post, error } = await supabase
-      .from('posts')
-      .update(data)
-      .eq('id', id)
-      .select()
-      .single()
-    
-    if (error) throw error
-    return post
+  updatePost: async (id: string, data: PostUpdate, file?: File) => {
+    try {
+      let imageUrl = data.image_url || null;
+  
+      if (file) {
+        // Create unique file path
+        const filePath = `posts/${Date.now()}-${file.name}`;
+        
+        // Upload file to storage
+        const { error: uploadError } = await supabase.storage
+          .from("blog_images")
+          .upload(filePath, file);
+        
+        if (uploadError) throw uploadError;
+  
+        // Get public URL - IMPORTANT: add await!
+        const { data: urldata } = await supabase.storage
+          .from('blog_images')
+          .getPublicUrl(filePath);
+        
+        imageUrl = urldata.publicUrl;
+      }
+  
+      // Prepare update data
+      const updateData: any = { ...data };
+      
+      // Only update image_url if we have a new value
+      if (imageUrl !== null) {
+        updateData.image_url = imageUrl; // Use the correct field name
+      }
+      
+      // Add updated_at timestamp
+      updateData.updated_at = new Date().toISOString();
+  
+      // Update the post
+      const { data: post, error } = await supabase
+        .from('posts')
+        .update(updateData) // Pass the prepared object
+        .eq('id', id)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return post;
+      
+    } catch (error: any) {
+      console.error("Update post error:", error);
+      throw error;
+    }
   },
 
   publishPost: async (id: string) => {

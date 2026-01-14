@@ -7,7 +7,7 @@ import Login from '../pages/Login'
 import Notfound from '../pages/Notfound'
 import CreatePost from '../pages/CreatePost'
 import BlogItem  from '../pages/BlogItem'
-import UserBlogs from '../pages/UserBlogs'
+import Profile from '../pages/UserBlogs'
 function AppContent() {
   
   return (
@@ -23,7 +23,7 @@ function AppContent() {
         <Route path='/login' element={<Login/>}/>
         <Route element={<Protected />}>
           <Route path="/create" element={<CreatePost />} />
-          <Route path='/profile/My-blogs' element={<UserBlogs/>} />
+          <Route path='/profile' element={<Profile/>} />
         </Route>
         <Route path='*' element={<Notfound/>}/>
       </Routes>

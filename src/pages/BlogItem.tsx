@@ -13,6 +13,7 @@ function PostItem() {
   const [editable, setEditable] = useState<boolean>(false)
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [editData, setEditData] = useState<PostUpdate | null>(null)
+  const [file , setFile ] = useState<File>()
   const user = useAppSelector(state => state.auth.user?.id)
   
   useEffect(() => {
@@ -23,6 +24,14 @@ function PostItem() {
       setLoading(false)
     }
   }, [slug])
+  
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0]
+    if (selectedFile){
+        setFile(selectedFile)
+    }
+  }
+
 
   const getItemSlug = async () => {
     if (!slug) return
@@ -77,7 +86,7 @@ function PostItem() {
         }
       })
       
-      await postService.updatePost(data.id, updatePayload)
+      await postService.updatePost(data.id, updatePayload , file)
       
       await getItemSlug()
       setEditable(false)
@@ -158,7 +167,7 @@ function PostItem() {
   }
 
   const backHistory = () => {
-    window.history.back()
+    navigate(-1)
   }
 
   return (
@@ -322,9 +331,8 @@ function PostItem() {
               Image URL
             </label>
             <input
-              type="url"
-              value={editData.image_url}
-              onChange={(e) => handleFieldChange('image_url', e.target.value)}
+              type="file"
+              onChange={handleFile}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="https://example.com/image.jpg"
             />
