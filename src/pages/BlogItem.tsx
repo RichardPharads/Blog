@@ -342,7 +342,7 @@ function PostItem() {
               rows={15}
             />
           ) : (
-            <div className="whitespace-pre-line text-gray-800 leading-relaxed mt-6">
+            <div className="whitespace-pre-line text-gray-800 leading-relaxed mt-4">
               {data.content}
             </div>
           )}

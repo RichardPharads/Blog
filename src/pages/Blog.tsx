@@ -9,28 +9,46 @@ function Blog() {
   const [loading , setLoading ] = useState(true)
   const [posts, setPosts] = useState<Post[] | null>([])
   const [error , setError ] = useState<string | null>(null)
-  const paggination = useAppSelector(state => state.page.pageCount)
+  const page = useAppSelector(state => state.page.pageCount)
   useEffect(() => {
-    loadPosts()
-  },[paggination])
+    loadPostsPages()
+  },[page])
 
-
-
-  const loadPosts = async () => {
+  const loadPostsPages = async () => {
     try {
       setLoading(true)
       setError(null)
-      const data = await  postService.getPosts({limit:paggination * 10})
+      const data = await postService.getPostPaggination(page , 10)
+      if(error){
+        throw error
+      }else{
+        setPosts(data)
+      }
       setPosts(data)
     } catch (error:any) {
-      console.log("failed to load post", error)
-      setError(error?.message || "Error")
-      setError(null)
+      setError(error)
     }
     finally{
       setLoading(false)
     }
   }
+
+  //Infinite Pagination
+  // const loadPosts = async () => {
+  //   try {
+  //     setLoading(true)
+  //     setError(null)
+  //     const data = await  postService.getPosts({limit:page * 10})
+  //     setPosts(data)
+  //   } catch (error:any) {
+  //     console.log("failed to load post", error)
+  //     setError(error?.message || "Error")
+  //     setError(null)
+  //   }
+  //   finally{
+  //     setLoading(false)
+  //   }
+  // }
 
   if (loading) {
     return (
@@ -54,7 +72,7 @@ function Blog() {
   if(posts?.length === 0){
     return <div>
       <h1>No Posts Yet!</h1>
-      <button onClick={loadPosts}> reload </button>
+      <button onClick={loadPostsPages}> reload </button>
     </div>
   }
 

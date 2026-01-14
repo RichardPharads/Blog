@@ -16,7 +16,6 @@ export type Post = {
   user_id: string
 }
 
-
 export type PostCreate =  Omit<Post , 'id'>
 export type PostUpdate = Partial<PostCreate>
 
@@ -65,6 +64,21 @@ export const postService = {
     if (error) throw error
     return posts
   },
+
+  getPostPaggination: async (page:number , pageSize:number) => {
+    const from = (page - 1) * pageSize
+    const to = from + (pageSize - 1)
+    const {data , error } = await supabase
+    .from('posts')
+    .select("*")
+    .order("created_at" , {ascending: false})
+    .range(from , to)
+    if(error){
+      throw error
+    }
+    return data
+  },
+
 
   getPostBySlug: async (slug: string) => {
     const { data: post, error } = await supabase
