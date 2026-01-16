@@ -66,14 +66,14 @@ export const postService = {
 
   // READ
   getPost: async (id: string) => {
-    const { data: post, error } = await supabase
+    const { data, error:errorPost } = await supabase
       .from('posts')
       .select('*')
       .eq('id', id)
       .single()
-    
-    if (error) throw error
-    return post
+      if (errorPost) throw errorPost
+      return data || []
+
   },
 
   getPosts: async (options?: { limit?: number; page?: number }) => {

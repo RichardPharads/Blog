@@ -6,8 +6,10 @@ import Register from '../pages/Register'
 import Login from '../pages/Login'
 import Notfound from '../pages/Notfound'
 import CreatePost from '../pages/CreatePost'
-import BlogItem  from '../pages/BlogItem'
+import BlogItem  from '../components/BlogItem'
 import Profile from '../pages/UserBlogs'
+import CommentSectionPage from './Commentsection'
+import EditCommentPage from '../pages/EditCommentPage'
 function AppContent() {
   
   return (
@@ -24,7 +26,9 @@ function AppContent() {
         <Route element={<Protected />}>
           <Route path="/create" element={<CreatePost />} />
           <Route path='/profile' element={<Profile/>} />
-        </Route>
+          <Route path='/blog/:slug/comment' element={<CommentSectionPage/>}/>
+          <Route path="/comment/:id/edit" element={<EditCommentPage />} />
+          </Route>
         <Route path='*' element={<Notfound/>}/>
       </Routes>
     </BrowserRouter>

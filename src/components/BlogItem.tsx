@@ -3,7 +3,10 @@ import { postService } from '../services/post.services'
 import type { Post, PostUpdate } from '../services/post.services'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAppSelector } from '../hooks'
-
+import { commentService } from '../services/comment.services'
+import { useLocation } from 'react-router-dom'
+import type {Comment} from '../services/comment.services'
+import CommentComponent from './CommentComponent'
 function PostItem() {
   const navigate = useNavigate()
   const { slug } = useParams<{ slug: string }>()
@@ -14,9 +17,11 @@ function PostItem() {
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [editData, setEditData] = useState<PostUpdate | null>(null)
   const [file , setFile ] = useState<File>()
+  const [comments , setComments ] = useState<null |Comment[] >(null)
   const user = useAppSelector(state => state.auth.user?.id)
-  
+  const location = useLocation()
   useEffect(() => {
+
     if (slug) {
       getItemSlug()
     } else {
@@ -25,13 +30,24 @@ function PostItem() {
     }
   }, [slug])
   
+  
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0]
     if (selectedFile){
         setFile(selectedFile)
     }
   }
-
+  const fetchComments = async (postSlug: string) => {
+    try {
+      const commentResult = await commentService.getCommentsBySlug(postSlug)
+      setComments(commentResult.comments || [])
+    } catch (err) {
+      console.error(err)
+      setComments([])
+    }
+  }
+  
+ 
 
   const getItemSlug = async () => {
     if (!slug) return
@@ -41,23 +57,33 @@ function PostItem() {
       setError(null)
       
       console.log("Fetching post with slug:", slug)
+      
+      // 1. Fetch post data
       const item = await postService.getPostBySlug(slug)
       setData(item)
+      
+      // 2. Set edit data
       setEditData({
         title: item.title,
         excerpt: item.excerpt || '',
         content: item.content,
         category: item.category || '',
-        image_url: item.image_url,
+        image_url: item.image_url || '', 
         published: item.published,
         readtime: item.readtime || '5 min'
       })
+      
+      // 3. Fetch comments 
+      await fetchComments(item.slug)
+
+      
       return item.id
       
     } catch (error: any) {
       console.error("Error fetching post:", error)
       setError(error.message || "Failed to load post")
       setData(null)
+      setComments([]) // Clear comments on error
     } finally {
       setLoading(false)
     }
@@ -367,12 +393,33 @@ function PostItem() {
         )}
         
         {/* Slug */}
-        <div className="mt-8 pt-6 border-t border-gray-200">
+        <div className="mt-8 pt-6 border-t border-gray-200 flex items-center w-full justify-between">
+          
+
           <p className="text-sm text-gray-500">
-            Slug: <code className="bg-gray-100 px-2 py-1 rounded">{data.slug}</code>
+            Slug: <code className=" px-2 py-1 rounded bg-neutral-200">{data.slug}</code>
           </p>
+
         </div>
+        <div className='flex flex-col gap-4'>
+          {
+            comments ? comments?.map((item) => 
+              <CommentComponent 
+                id={item.id}
+                user_id={item.user_id}                
+                onDeleted={() => fetchComments(data.slug)}
+                username={item.profiles?.username || "User"}
+                comment={item.content}
+                created_at={item.created_at}
+                />
+            ) : <h1>No Comments</h1>
+          }
+          </div>
+          <button  className="py-2  mt-5 border px-4 rounded-md my-2 bg-black text-white" onClick={() => navigate(location.pathname + '/comment')}>Comment</button>
+
       </article>
+        
+          
     </div>
   )
 }
